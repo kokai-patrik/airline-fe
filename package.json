@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev -p 3001",
+    "dev": "nuxt dev -p 3001 --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -21,6 +21,7 @@
     "@vee-validate/zod": "^4.15.0",
     "@vuepic/vue-datepicker": "^11.0.2",
     "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
     "pinia-plugin-persistedstate": "^4.4.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.10",

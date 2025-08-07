@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Error from '~/components/Error.vue';
+import clsx from 'clsx';
 
-interface Option {
-  value: string;
-  label: string;
-}
+import { useSelect } from '~/composables/form/useSelect';
+import type { Option } from '~/composables/form/useSelect';
+
+import Error from '~/components/Error.vue';
 
 const props = defineProps<{
   label: string;
@@ -12,79 +12,62 @@ const props = defineProps<{
   error?: string | null;
 }>();
 
-const selected = defineModel<string | null>();
+const selected = defineModel<string | null>({ default: null });
 
-const query = ref<string>('');
-const focused = ref<boolean>(false);
-const isUserTyping = ref(false);
+const {
+  query,
+  focused,
+  optionsByQuery,
+  onFocus,
+  onInput,
+  selectOption,
+} = useSelect(props, selected);
 
-const optionsByQuery = computed(() => {
-  if (!isUserTyping.value) {
-    return props.options;
-  }
+const labelClass = computed(() =>
+  clsx(
+    'transition-all ease-in-out absolute top-1.5 left-3 block mb-2 text-[10px] uppercase font-black text-gray',
+    {
+      'opacity-0 invisible': !query.value,
+      'opacity-1 visible': query.value
+    }
+  )
+);
 
-  return query.value
-    ? props.options.filter((opt) =>
-        opt.label.toLowerCase().includes(query.value.toLowerCase())
-      )
-    : props.options;
-});
+const inputClass = computed(() =>
+  clsx(
+    'transition-all duration-150 ease-in-out w-full h-[50px] px-3 py-2 border rounded-sm focus:outline-none focus:ring-1',
+    {
+      'pt-5': query.value,
+      'border-gray focus:ring-primary focus:border-primary': !props.error,
+      'bg-light-magenta border-secondary ring-1 ring-secondary shadow-error': props.error
+    }
+  )
+);
 
-function selectOption(option: Option) {
-  selected.value = option.value;
-  query.value = option.label;
-  focused.value = false;
-  isUserTyping.value = false;
-}
-
-function onFocus() {
-  focused.value = true;
-  isUserTyping.value = false;
-}
-
-function onInput(event: Event) {
-  isUserTyping.value = true;
-  query.value = (event.target as HTMLInputElement).value;
-}
-
-watch(() => selected.value, (value) => {
-  if (value) {
-    const option = props.options.find(opt => opt.value === value);
-    query.value = option ? option.label : '';
-  } else {
-    query.value = '';
-  }
-}, { immediate: true });
+const optionClass = (optionLabel: string) =>
+  clsx(
+    'px-3 py-2 transition-all duration-200 hover:bg-primary/15 cursor-pointer text-sm rounded-sm',
+    {
+      'bg-primary/15 mb-1': query.value === optionLabel
+    }
+  );
 </script>
 
 <template>
   <div class="w-full">
     <div class="relative w-full cursor-text">
-      <label :class="[
-        'transition-all ease-in-out absolute top-1.5 left-3 block mb-2 text-[10px] uppercase font-black text-gray',
-        {
-          'opacity-0 invisible': !query,
-          'opacity-1 visible': query
-        }
-      ]">
-        {{ props.label }}
-      </label>
+      <label :class="labelClass">{{ props.label }}</label>
+
       <input
         type="text"
         v-model="query"
-        :class="[
-          'transition-all duration-150 ease-in-out w-full h-[50px] px-3 py-2 border border-gray rounded-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary',
-          {
-            'pt-5': query,
-            'border-gray': !query,
-            'bg-light-magenta border-secondary ring-1 ring-secondary shadow-error': props.error
-          }
-        ]"
         :placeholder="props.label"
+        :class="inputClass"
         @focus="onFocus"
         @input="onInput"
         @blur="focused = false"
       />
+
       <Transition name="fade-scale">
         <div
           v-if="focused"
@@ -94,28 +77,21 @@ watch(() => selected.value, (value) => {
             <li
               v-for="option in optionsByQuery"
               :key="option.value"
-              :class="['px-3 py-2 transition-all duration-200 hover:bg-primary/15 cursor-pointer text-sm rounded-sm', {
-                'bg-primary/15 mb-1': query === option.label
-              }]"
+              :class="optionClass(option.label)"
               @click="selectOption(option)"
             >
               {{ option.label }}
             </li>
           </ul>
-          <p
-            v-if="optionsByQuery.length === 0"
-            class="px-4 py-2 text-sm text-gray-500"
-          >
+
+          <p v-else class="px-4 py-2 text-sm text-gray-500">
             No options found
           </p>
         </div>
       </Transition>
     </div>
-    <Error
-      v-if="props.error"
-      :message="props.error"
-      class="mt-2"
-    />
+
+    <Error v-if="props.error" :message="props.error" class="mt-2" />
   </div>
 </template>
 
