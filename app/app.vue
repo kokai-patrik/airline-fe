@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { ApiResponse, Station } from './types';
+
 import { useStationsStore } from '~/stores/stations';
 
 const stationsStore = useStationsStore();
@@ -9,7 +11,7 @@ const apiUrl = config.public.API;
 if (import.meta.server && stationsStore.stations.length === 0) {
   const { data } = await useFetch(`${apiUrl}/stations`);
 
-  const stationsData = data.value as any;
+  const stationsData = data.value as ApiResponse<Station[]>;
 
   if (stationsData?.data) {
     stationsStore.setStations(stationsData.data);

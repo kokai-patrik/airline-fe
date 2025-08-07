@@ -26,3 +26,7 @@ export interface Flight {
   arrivalDateTime: string;
   fares: Fare[];
 }
+
+export interface ApiResponse<T> {
+  data: T;
+}

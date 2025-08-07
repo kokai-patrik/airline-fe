@@ -1,6 +1,6 @@
 import { storeToRefs } from 'pinia';
 
-import type { Station } from '~/types';
+import type { ApiResponse, Station } from '~/types';
 
 import { useApi } from '~/composables/useApi';
 
@@ -48,7 +48,7 @@ export function useSearchForm() {
     returnDate: string,
   ) {
     try {
-      const response: any = await useApi('flight-dates', {
+      const response: ApiResponse<string[]> = await useApi('flight-dates', {
         method: 'GET',
         params: {
           departure: origin,
