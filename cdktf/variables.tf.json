@@ -1,0 +1,16 @@
+{
+  "variable": {
+    "ghcr_pat": {
+      "type": "string",
+      "description": "GitHub Container Registry Personal Access Token"
+    },
+    "ghcr_user": {
+      "type": "string",
+      "description": "GitHub username for container access"
+    },
+    "docker_image": {
+      "type": "string",
+      "description": "Full GHCR docker image"
+    }
+  }
+}
