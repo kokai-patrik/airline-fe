@@ -7,7 +7,7 @@ import { useSearchForm } from '~/features/Search/composables/useSearchForm';
 import { useSearchStore } from '~/features/Search/stores/search';
 
 import { schema } from '~/features/SelectFlight/schemas/inboundFormSchema';
-import { getISODate } from '~/utils/helpers';
+import { getISODate, now, nowLaterMonth } from '~/helpers/datetime';
 
 import Datepicker from '~/components/form/Datepicker.vue';
 import Button from '~/components/form/Button.vue';
@@ -24,27 +24,24 @@ const router = useRouter();
 const { fetchDates } = useSearchForm();
 const { returnDate } = storeToRefs(useSearchStore());
 
-const { setFieldValue, handleSubmit } = useForm({
+const { values, setFieldValue, handleSubmit } = useForm({
   validationSchema: toTypedSchema(schema),
 });
 
 const returnDates = ref<string[]>([]);
 
 const onSubmit = handleSubmit(async (values) => {
-  if (values.return) {
-    returnDate.value = values.return;
+  if (values.returnDate) {
+    returnDate.value = values.returnDate as Date;
 
     router.replace({
       query: {
         ...route.query,
-        to: getISODate(values.return as Date),
+        to: getISODate(values.returnDate as Date),
       },
     });
   }
 });
-
-const now = new Date();
-const nowLaterMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
 onMounted(async () => {
   const getReturnDates = await fetchDates(
@@ -63,7 +60,7 @@ watch(
   () => props.from,
   async (newFrom) => {
     if (newFrom) {
-      setFieldValue('departure', new Date(newFrom));
+      setFieldValue('departureDate', new Date(newFrom));
     }
   },
   {
@@ -74,8 +71,8 @@ watch(
 </script>
 
 <template>
-  <form class="flex h-full flex-col gap-[20px] p-5 md:flex-row" @submit="onSubmit">
-    <Field v-slot="{ value, errors, handleChange }" name="return">
+  <form class="flex max-w-lg h-full flex-col gap-[20px] p-5 mx-auto md:flex-row" @submit="onSubmit">
+    <Field v-slot="{ value, errors, handleChange }" name="returnDate">
       <Datepicker
         :model-value="value"
         :error="errors?.[0]"

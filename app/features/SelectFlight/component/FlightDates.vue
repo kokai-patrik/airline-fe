@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatDate } from '~/utils/helpers';
+import { formatDate } from '~/helpers/datetime';
 
 defineProps<{
   currentDate: string;

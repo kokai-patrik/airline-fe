@@ -12,6 +12,7 @@ export interface CartItem {
 
 export const useCartStore = defineStore('cart', () => {
   const cart = ref<CartItem[]>([]);
+  const isModalOpen = ref<boolean>(false);
 
   const total = computed(() => {
     return cart.value.reduce((acc, item) => acc + item.price, 0);
@@ -41,11 +42,17 @@ export const useCartStore = defineStore('cart', () => {
     cart.value = [];
   };
 
+  const isInCart = (id: string) => {
+    return cart.value.some((item) => item.id === id);
+  };
+
   return {
     cart,
     total,
     addToCart,
     removeFromCart,
+    isInCart,
     clearCart,
+    isModalOpen,
   };
 });

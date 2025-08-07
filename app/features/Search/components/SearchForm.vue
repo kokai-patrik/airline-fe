@@ -5,7 +5,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useSearchForm } from '~/features/Search/composables/useSearchForm';
 import { useSearchStore } from '~/features/Search/stores/search';
 
-import { getISODate } from '~/utils/helpers';
+import { getISODate, now, nowLaterMonth } from '~/helpers/datetime';
 import { schema } from '~/features/Search/schemas/searchFormSchema';
 
 import Box from '~/components/Box.vue';
@@ -31,8 +31,8 @@ const onSubmit = handleSubmit(async (values) => {
     query: {
       departure: values.origin,
       arrival: values.destination,
-      from: getISODate(values.departure as Date),
-      to: values.return ? getISODate(values.return as Date) : null,
+      from: getISODate(values.departureDate as Date),
+      to: values.returnDate ? getISODate(values.returnDate as Date) : null,
     },
   });
 });
@@ -47,18 +47,15 @@ onMounted(() => {
   }
 
   if (searchStore.departureDate) {
-    setFieldValue('departure', new Date(searchStore.departureDate));
+    setFieldValue('departureDate', new Date(searchStore.departureDate));
   }
 
   if (searchStore.returnDate) {
-    setFieldValue('return', new Date(searchStore.returnDate));
+    setFieldValue('returnDate', new Date(searchStore.returnDate));
   }
 
   isStoreInitialized.value = true;
 });
-
-const now = new Date();
-const nowLaterMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
 watch(
   () => [values.origin, values.destination],
@@ -97,8 +94,8 @@ watch(
     searchStore.setAllValues({
       origin: currentValues.origin ?? '',
       destination: currentValues.destination ?? '',
-      departureDate: currentValues.departure as Date,
-      returnDate: currentValues.return as Date,
+      departureDate: currentValues.departureDate as Date,
+      returnDate: currentValues.returnDate as Date,
     });
   },
   { deep: true },
@@ -138,7 +135,7 @@ watch(
               </Field>
             </div>
             <div class="flex w-full flex-col gap-4 sm:flex-row">
-              <Field v-slot="{ value, errors, handleChange }" name="departure">
+              <Field v-slot="{ value, errors, handleChange }" name="departureDate">
                 <Datepicker
                   :model-value="value"
                   :error="errors?.[0]"
@@ -147,7 +144,7 @@ watch(
                   @update:model-value="handleChange"
                 />
               </Field>
-              <Field v-slot="{ value, errors, handleChange }" name="return">
+              <Field v-slot="{ value, errors, handleChange }" name="returnDate">
                 <Datepicker
                   :model-value="value"
                   :error="errors?.[0]"

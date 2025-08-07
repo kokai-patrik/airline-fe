@@ -14,13 +14,20 @@ export function useSelect(props: UseSelectProps, selected: Ref<string | null>) {
   const query = ref<string>('');
   const focused = ref<boolean>(false);
   const isUserTyping = ref<boolean>(false);
+  const activeIndex = ref<number>(-1);
 
   const optionsByQuery = computed(() => {
-    if (!isUserTyping.value) return props.options;
-
-    return query.value
-      ? props.options.filter((opt) => opt.label.toLowerCase().includes(query.value.toLowerCase()))
+    const filtered = query.value
+      ? props.options.filter((opt) =>
+          opt.label.toLowerCase().includes(query.value.toLowerCase())
+        )
       : props.options;
+
+    if (activeIndex.value >= filtered.length) {
+      activeIndex.value = filtered.length - 1;
+    }
+
+    return filtered;
   });
 
   function selectOption(option: Option) {
@@ -28,6 +35,7 @@ export function useSelect(props: UseSelectProps, selected: Ref<string | null>) {
     query.value = option.label;
     focused.value = false;
     isUserTyping.value = false;
+    activeIndex.value = -1;
   }
 
   function onFocus() {
@@ -38,6 +46,27 @@ export function useSelect(props: UseSelectProps, selected: Ref<string | null>) {
   function onInput(event: Event) {
     isUserTyping.value = true;
     query.value = (event.target as HTMLInputElement).value;
+    activeIndex.value = 0;
+  }
+
+  function moveUp() {
+    if (activeIndex.value > 0) {
+      activeIndex.value -= 1;
+    }
+  }
+
+  function moveDown() {
+    if (activeIndex.value < optionsByQuery.value.length - 1) {
+      activeIndex.value += 1;
+    }
+  }
+
+  function selectActive() {
+    const option = optionsByQuery.value[activeIndex.value];
+
+    if (option) {
+      selectOption(option);
+    }
   }
 
   watch(
@@ -57,8 +86,12 @@ export function useSelect(props: UseSelectProps, selected: Ref<string | null>) {
     query,
     focused,
     optionsByQuery,
+    activeIndex,
     onFocus,
     onInput,
     selectOption,
+    moveUp,
+    moveDown,
+    selectActive,
   };
 }

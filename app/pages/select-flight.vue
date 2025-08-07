@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { useStationsStore } from '~/stores/stations';
-import { useCartStore } from '~/stores/cart';
-import type { CartItem } from '~/stores/cart';
+import { useCartStore } from '~/features/Cart/stores/cart';
+import type { CartItem } from '~/features/Cart/stores/cart';
 import { useSelectFlight } from '~/features/SelectFlight/composables/useSelectFlight';
 
 import SvgIcon from '~/components/SvgIcon.vue';
@@ -12,9 +13,11 @@ import FlightBox from '~/features/SelectFlight/component/FlightsBox.vue';
 import FlightDates from '~/features/SelectFlight/component/FlightDates.vue';
 import FaresGrid from '~/features/SelectFlight/component/FaresGrid.vue';
 import InboundForm from '~/features/SelectFlight/component/InboundForm.vue';
+import SummaryModal from '~/features/SelectFlight/component/Modal/SummaryModal.vue';
 
 const route = useRoute();
 const cartStore = useCartStore();
+const { isModalOpen } = storeToRefs(cartStore);
 const { getStationName } = useStationsStore();
 const { getFareCharts } = useSelectFlight();
 
@@ -70,20 +73,22 @@ const {
 
 <template>
   <div>
-    <div class="flex h-[60px] w-full items-center gap-10 bg-primary px-5">
+    <div class="flex h-[60px] w-full items-center gap-6 lg:gap-40 bg-primary px-5">
       <NuxtLink to="/" title="Mito Airline">
         <SvgIcon name="logo" class="h-8 w-8 text-white" />
       </NuxtLink>
       <div class="flex items-center gap-6 text-white">
         <div>
-          <p class="text-[0.7rem] uppercase">Leaving from</p>
-          <p>{{ getStationName(departure) }}</p>
+          <p class="text-[10px] uppercase">Leaving from</p>
+          <p class="text-lg">{{ getStationName(departure) }}</p>
         </div>
         <div>
           <SvgIcon name="long-arrow-right" class="text-white" />
           <SvgIcon name="long-arrow-right" class="rotate-180 text-white" />
         </div>
-        <div class="mt-auto">{{ getStationName(arrival) }}</div>
+        <div class="mt-auto">
+          <p class="text-lg">{{ getStationName(arrival) }}</p>
+        </div>
       </div>
     </div>
     <div class="container mx-auto px-3 pb-10">
@@ -127,9 +132,10 @@ const {
           >
             <template v-if="inboundData?.length === 0">
               <InboundForm
-:departure="arrival"
-:arrival="departure"
-:from="from" />
+                :departure="arrival"
+                :arrival="departure"
+                :from="from"
+              />
             </template>
             <template v-if="inboundData?.length">
               <template v-if="inboundPending">
@@ -159,5 +165,6 @@ const {
         </div>
       </div>
     </div>
+    <SummaryModal :is-active="isModalOpen" />
   </div>
 </template>

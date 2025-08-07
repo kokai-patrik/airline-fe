@@ -3,14 +3,16 @@ import clsx from 'clsx';
 
 import { FareBundle } from '~/types';
 import type { Fare, Flight } from '~/types';
-import type { CartItem } from '~/stores/cart';
+import type { CartItem } from '~/features/Cart/stores/cart';
 
+import { useCartStore } from '~/features/Cart/stores/cart';
 import { useStationsStore } from '~/stores/stations';
 
 import Button from '~/components/form/Button.vue';
 
 import { formatPrice } from '~/utils/priceFormat';
-import { getTime, getISODate } from '~/utils/helpers';
+import { getTime, getISODate } from '~/helpers/datetime';
+import { getCartItemId } from '~/features/Cart/helpers/cart';
 
 const props = defineProps<{
   faresData: Flight[];
@@ -21,6 +23,7 @@ const emit = defineEmits<{
   (e: 'addToCart', cartItem: CartItem): void;
 }>();
 
+const { isInCart } = useCartStore();
 const stationsStore = useStationsStore();
 
 const getButtonText = (fare: Fare) => {
@@ -34,7 +37,7 @@ const getButtonText = (fare: Fare) => {
 function addToCart(fare: Fare, option: Flight) {
   const name = `${stationsStore.getStationName(option.departureStation)} – ${stationsStore.getStationName(option.arrivalStation)}`;
   const date = getISODate(new Date(option.departureDateTime));
-  const id = `${date}-${props.type}-${fare.bundle}-${fare.price.amount}`;
+  const id = getCartItemId(fare, option, props.type);
 
   emit('addToCart', {
     type: props.type,
@@ -88,7 +91,10 @@ function getBundleTextClass(index: number) {
         <Button
           type="button"
           variant="secondary-outline"
-          class="!font-bold"
+          :class="['!font-bold', {
+            '!bg-secondary text-white': isInCart(getCartItemId(fare, option, props.type)),
+          }]"
+          :disabled="fare.remainingTickets === 0"
           @click="addToCart(fare, option)"
         >
           {{ getButtonText(fare) }}

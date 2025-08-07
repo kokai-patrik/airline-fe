@@ -14,10 +14,31 @@ const props = defineProps<{
 
 const selected = defineModel<string | null>({ default: null });
 
-const { query, focused, optionsByQuery, onFocus, onInput, selectOption } = useSelect(
-  props,
-  selected,
-);
+const {
+  query,
+  focused,
+  optionsByQuery,
+  activeIndex,
+  onFocus,
+  onInput,
+  selectOption,
+  moveUp,
+  moveDown,
+  selectActive,
+} = useSelect(props, selected);
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    moveDown();
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    moveUp();
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    selectActive();
+  }
+}
 
 const labelClass = computed(() =>
   clsx(
@@ -61,6 +82,7 @@ const optionClass = (optionLabel: string) =>
         :class="inputClass"
         @focus="onFocus"
         @input="onInput"
+        @keydown="handleKeydown"
         @blur="focused = false"
       >
 
@@ -71,9 +93,12 @@ const optionClass = (optionLabel: string) =>
         >
           <ul v-if="optionsByQuery.length > 0">
             <li
-              v-for="option in optionsByQuery"
+              v-for="(option, index) in optionsByQuery"
               :key="option.value"
-              :class="optionClass(option.label)"
+              :class="[
+                optionClass(option.label),
+                { 'bg-primary text-white': index === activeIndex },
+              ]"
               @click="selectOption(option)"
             >
               {{ option.label }}

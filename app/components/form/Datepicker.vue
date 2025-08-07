@@ -5,6 +5,8 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import SvgIcon from '~/components/SvgIcon.vue';
 import Error from '~/components/Error.vue';
 
+import { now } from '~/helpers/datetime';
+
 const value = defineModel<Date | null>();
 
 const props = defineProps<{
@@ -38,6 +40,7 @@ const formatDate = (date: Date) => {
       :time-picker="false"
       :format="formatDate"
       :allowed-dates="props.allowedDates"
+      :min-date="now"
       :action-row="{
         showNow: false,
         showPreview: false,
@@ -52,9 +55,10 @@ const formatDate = (date: Date) => {
       </template>
     </VueDatePicker>
     <Error
-v-if="props.error"
-:message="props.error"
-class="mt-2" />
+      v-if="props.error"
+      :message="props.error"
+      class="mt-2"
+    />
   </div>
 </template>
 
@@ -81,6 +85,12 @@ class="mt-2" />
 
   .dp__calendar_header_item {
     @apply flex items-center text-sm leading-none;
+  }
+
+  /** Active Date */
+  .dp__active_date,
+  .dp__overlay_cell_active {
+    @apply bg-primary;
   }
 
   /* Navigation */
