@@ -1,3 +1,31 @@
+# Airline FE
+
+A modern web application built with [Nuxt 4](https://nuxt.com/), TypeScript, and Tailwind CSS. The project features a structured form system using VeeValidate and Zod for type-safe validation, and a fully automated infrastructure deployment pipeline using CDK for Terraform (CDKTF) on AWS EC2.
+
+## Tech Stack
+
+- Nuxt 4
+- TypeScript
+- Pinia
+- VeeValidate
+- Zod
+- Tailwind CSS
+- @vuepic/vue-datepicker
+
+## Infrastructure
+
+- CDK for Terraform (CDKTF)
+- AWS EC2
+- Docker
+- GitHub Actions
+
+# Development
+
+### Install dependencies
+
+```bash
+pnpm install
+
 # Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
