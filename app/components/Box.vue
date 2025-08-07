@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white shadow-box rounded-sm">
+  <div class="rounded-sm bg-white shadow-box">
     <div class="header">
       <slot name="header" />
     </div>

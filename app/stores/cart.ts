@@ -18,11 +18,13 @@ export const useCartStore = defineStore('cart', () => {
   });
 
   const addToCart = (item: CartItem) => {
-    if (cart.value.find(cartItem => cartItem.id === item.id)) {
+    if (cart.value.find((cartItem) => cartItem.id === item.id)) {
       return;
     }
 
-    const existingType = cart.value.find(cartItem => cartItem.type === item.type && cartItem.date === item.date);
+    const existingType = cart.value.find(
+      (cartItem) => cartItem.type === item.type && cartItem.date === item.date,
+    );
 
     if (existingType) {
       removeFromCart(existingType.id);
@@ -32,7 +34,7 @@ export const useCartStore = defineStore('cart', () => {
   };
 
   const removeFromCart = (id: string) => {
-    cart.value = cart.value.filter(cartItem => cartItem.id !== id);
+    cart.value = cart.value.filter((cartItem) => cartItem.id !== id);
   };
 
   const clearCart = () => {

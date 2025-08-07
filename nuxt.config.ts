@@ -3,11 +3,7 @@ import svgLoader from 'vite-svg-loader';
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: [
-    '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-    '@vee-validate/nuxt',
-  ],
+  modules: ['@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@vee-validate/nuxt'],
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {

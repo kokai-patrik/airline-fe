@@ -14,23 +14,19 @@ const props = defineProps<{
 
 const selected = defineModel<string | null>({ default: null });
 
-const {
-  query,
-  focused,
-  optionsByQuery,
-  onFocus,
-  onInput,
-  selectOption,
-} = useSelect(props, selected);
+const { query, focused, optionsByQuery, onFocus, onInput, selectOption } = useSelect(
+  props,
+  selected,
+);
 
 const labelClass = computed(() =>
   clsx(
     'transition-all ease-in-out absolute top-1.5 left-3 block mb-2 text-[10px] uppercase font-black text-gray',
     {
       'opacity-0 invisible': !query.value,
-      'opacity-1 visible': query.value
-    }
-  )
+      'opacity-1 visible': query.value,
+    },
+  ),
 );
 
 const inputClass = computed(() =>
@@ -39,17 +35,17 @@ const inputClass = computed(() =>
     {
       'pt-5': query.value,
       'border-gray focus:ring-primary focus:border-primary': !props.error,
-      'bg-light-magenta border-secondary ring-1 ring-secondary shadow-error': props.error
-    }
-  )
+      'bg-light-magenta border-secondary ring-1 ring-secondary shadow-error': props.error,
+    },
+  ),
 );
 
 const optionClass = (optionLabel: string) =>
   clsx(
     'px-3 py-2 transition-all duration-200 hover:bg-primary/15 cursor-pointer text-sm rounded-sm',
     {
-      'bg-primary/15 mb-1': query.value === optionLabel
-    }
+      'bg-primary/15 mb-1': query.value === optionLabel,
+    },
   );
 </script>
 
@@ -59,19 +55,19 @@ const optionClass = (optionLabel: string) =>
       <label :class="labelClass">{{ props.label }}</label>
 
       <input
-        type="text"
         v-model="query"
+        type="text"
         :placeholder="props.label"
         :class="inputClass"
         @focus="onFocus"
         @input="onInput"
         @blur="focused = false"
-      />
+      >
 
       <Transition name="fade-scale">
         <div
           v-if="focused"
-          class="absolute top-[calc(100%+6px)] z-10 mt-1 w-full p-1 bg-white border border-gray rounded-sm max-h-60 overflow-auto"
+          class="absolute top-[calc(100%+6px)] z-10 mt-1 max-h-60 w-full overflow-auto rounded-sm border border-gray bg-white p-1"
         >
           <ul v-if="optionsByQuery.length > 0">
             <li
@@ -84,14 +80,16 @@ const optionClass = (optionLabel: string) =>
             </li>
           </ul>
 
-          <p v-else class="px-4 py-2 text-sm text-gray-500">
-            No options found
-          </p>
+          <p v-else class="text-gray-500 px-4 py-2 text-sm">No options found</p>
         </div>
       </Transition>
     </div>
 
-    <Error v-if="props.error" :message="props.error" class="mt-2" />
+    <Error
+      v-if="props.error"
+      :message="props.error"
+      class="mt-2"
+    />
   </div>
 </template>
 
@@ -103,11 +101,11 @@ const optionClass = (optionLabel: string) =>
 
 .fade-scale-enter-from,
 .fade-scale-leave-to {
-  @apply opacity-0 transform translate-y-1;
+  @apply translate-y-1 transform opacity-0;
 }
 
 .fade-scale-enter-to,
 .fade-scale-leave-from {
-  @apply opacity-100 transform translate-y-0;
+  @apply translate-y-0 transform opacity-100;
 }
 </style>

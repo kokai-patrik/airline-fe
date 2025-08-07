@@ -50,12 +50,9 @@ function addToCart(fare: Fare, option: Flight) {
 }
 
 function getFareWrapperClass(fare: Fare) {
-  return clsx(
-    'flex flex-col items-center py-2 lg:py-6 row-start-2 lg:col-span-1 lg:row-start-1',
-    {
-      'bg-light-gray': fare.bundle === FareBundle.STANDARD,
-    }
-  );
+  return clsx('flex flex-col items-center py-2 lg:py-6 row-start-2 lg:col-span-1 lg:row-start-1', {
+    'bg-light-gray': fare.bundle === FareBundle.STANDARD,
+  });
 }
 
 function getBundleTextClass(index: number) {
@@ -69,10 +66,12 @@ function getBundleTextClass(index: number) {
   <div
     v-for="(option, index) in faresData"
     :key="`${option.departureDateTime}-${option.arrivalDateTime}`"
-    class="flex flex-col gap-2 lg:gap-0 border-b border-light-gray-3"
+    class="flex flex-col gap-2 border-b border-light-gray-3 lg:gap-0"
   >
     <div class="grid grid-cols-3 grid-rows-[auto_auto] lg:grid-cols-4 lg:grid-rows-1">
-      <div class="flex items-center justify-center gap-2 py-1 lg:justify-start lg:px-4 w-full text-sm text-medium-gray font-light col-span-3 lg:col-span-1 lg:row-start-1">
+      <div
+        class="col-span-3 flex w-full items-center justify-center gap-2 py-1 text-sm font-light text-medium-gray lg:col-span-1 lg:row-start-1 lg:justify-start lg:px-4"
+      >
         <p>{{ getTime(option.departureDateTime) }}</p>
         <SvgIcon name="arrow-right" class="text-medium-gray" />
         <p>{{ getTime(option.arrivalDateTime) }}</p>

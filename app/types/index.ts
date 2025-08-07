@@ -14,7 +14,7 @@ export interface Fare {
   price: {
     amount: number;
     currencyCode: string;
-  }
+  };
   remainingTickets: number;
   bundle: FareBundle;
 }

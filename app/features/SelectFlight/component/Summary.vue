@@ -9,15 +9,15 @@ const { cart, total } = storeToRefs(useCartStore());
 
 <template>
   <div>
-    <div class="bg-white border-t border-light-gray-2 p-3">
-      <h2 class="text-lg font-semibold mb-2">Flights</h2>
+    <div class="border-t border-light-gray-2 bg-white p-3">
+      <h2 class="mb-2 text-lg font-semibold">Flights</h2>
       {{ total }}
       {{ cart }}
     </div>
     <Button
       type="button"
       variant="secondary"
-      class="w-full mt-4 !font-black !text-base"
+      class="mt-4 w-full !text-base !font-black"
       disabled
     >
       Pay now

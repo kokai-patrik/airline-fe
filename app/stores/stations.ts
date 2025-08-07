@@ -8,7 +8,7 @@ export const useStationsStore = defineStore('stations', () => {
   };
 
   const getStationName = (iata: string): string => {
-    const station = stations.value.find(station => station.iata === iata);
+    const station = stations.value.find((station) => station.iata === iata);
     return station ? station.shortName : iata;
   };
 

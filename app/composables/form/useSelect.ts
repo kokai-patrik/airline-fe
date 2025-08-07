@@ -19,9 +19,7 @@ export function useSelect(props: UseSelectProps, selected: Ref<string | null>) {
     if (!isUserTyping.value) return props.options;
 
     return query.value
-      ? props.options.filter((opt) =>
-          opt.label.toLowerCase().includes(query.value.toLowerCase())
-        )
+      ? props.options.filter((opt) => opt.label.toLowerCase().includes(query.value.toLowerCase()))
       : props.options;
   });
 
@@ -52,7 +50,7 @@ export function useSelect(props: UseSelectProps, selected: Ref<string | null>) {
         query.value = '';
       }
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return {

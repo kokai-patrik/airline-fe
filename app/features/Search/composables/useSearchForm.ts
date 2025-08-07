@@ -25,20 +25,28 @@ export function useSearchForm() {
       return [];
     }
 
-    const originConnections = stations.value.find((station: Station) => station.iata === selectedOrigin)?.connections || [];
+    const originConnections =
+      stations.value.find((station: Station) => station.iata === selectedOrigin)?.connections || [];
 
-    return stations.value?.map((station: Station) => {
-      if (originConnections.includes(station.iata)) {
-        return {
-          value: station.iata,
-          label: station.shortName,
-        };
-      }
-      return null;
-    }).filter(Boolean);
+    return stations.value
+      ?.map((station: Station) => {
+        if (originConnections.includes(station.iata)) {
+          return {
+            value: station.iata,
+            label: station.shortName,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
   });
 
-  async function fetchDates(origin: string, destination: string, departureDate: string, returnDate: string) {
+  async function fetchDates(
+    origin: string,
+    destination: string,
+    departureDate: string,
+    returnDate: string,
+  ) {
     try {
       const response: any = await useApi('flight-dates', {
         method: 'GET',
@@ -55,10 +63,11 @@ export function useSearchForm() {
       }
 
       throw new Error('No data returned from API');
-
     } catch (error) {
       throw new Error(
-        error instanceof Error ? error.message : 'An unknown error occurred while fetching flight dates'
+        error instanceof Error
+          ? error.message
+          : 'An unknown error occurred while fetching flight dates',
       );
     }
   }

@@ -16,12 +16,7 @@ import Button from '~/components/form/Button.vue';
 
 const router = useRouter();
 const searchStore = useSearchStore();
-const {
-  fetchDates,
-  isStoreInitialized,
-  origins,
-  destinations,
-} = useSearchForm();
+const { fetchDates, isStoreInitialized, origins, destinations } = useSearchForm();
 
 const { values, setFieldValue, handleSubmit } = useForm({
   validationSchema: toTypedSchema(schema),
@@ -30,7 +25,7 @@ const { values, setFieldValue, handleSubmit } = useForm({
 const departureDates = ref<string[]>([]);
 const returnDates = ref<string[]>([]);
 
-const onSubmit = handleSubmit(async values => {
+const onSubmit = handleSubmit(async (values) => {
   await router.push({
     name: 'select-flight',
     query: {
@@ -65,99 +60,100 @@ onMounted(() => {
 const now = new Date();
 const nowLaterMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
-watch(() => [values.origin, values.destination], async ([origin, destination]) => {
-  if (origin && destination) {
-    const getDepartureDates = await fetchDates(origin, destination, getISODate(now), getISODate(nowLaterMonth));
-    const getReturnDates = await fetchDates(destination, origin, getISODate(now), getISODate(nowLaterMonth));
+watch(
+  () => [values.origin, values.destination],
+  async ([origin, destination]) => {
+    if (origin && destination) {
+      const getDepartureDates = await fetchDates(
+        origin,
+        destination,
+        getISODate(now),
+        getISODate(nowLaterMonth),
+      );
+      const getReturnDates = await fetchDates(
+        destination,
+        origin,
+        getISODate(now),
+        getISODate(nowLaterMonth),
+      );
 
-    if (getDepartureDates) {
-      departureDates.value = getDepartureDates;
+      if (getDepartureDates) {
+        departureDates.value = getDepartureDates;
+      }
+
+      if (getReturnDates) {
+        returnDates.value = getReturnDates;
+      }
     }
+  },
+  { immediate: true },
+);
 
-    if (getReturnDates) {
-      returnDates.value = getReturnDates;
-    }
-  }
-}, { immediate: true });
+watch(
+  () => values,
+  (currentValues) => {
+    if (!isStoreInitialized.value) return;
 
-watch(() => values, (currentValues) => {
-  if (!isStoreInitialized.value) return;
-
-  searchStore.setAllValues({
-    origin: currentValues.origin ?? '',
-    destination: currentValues.destination ?? '',
-    departureDate: currentValues.departure as Date,
-    returnDate: currentValues.return as Date,
-  });
-}, { deep: true });
+    searchStore.setAllValues({
+      origin: currentValues.origin ?? '',
+      destination: currentValues.destination ?? '',
+      departureDate: currentValues.departure as Date,
+      returnDate: currentValues.return as Date,
+    });
+  },
+  { deep: true },
+);
 </script>
 
 <template>
-  <div class="flex items-center w-full h-screen p-3 md:p-0">
-    <Box class="w-[570px] mx-auto">
+  <div class="flex h-screen w-full items-center p-3 md:p-0">
+    <Box class="mx-auto w-[570px]">
       <template #header>
-        <div class="flex items-center gap-5 h-[50px] px-4 bg-primary">
-          <SvgIcon name="logo" class="w-8 h-8 text-white" />
-          <h1 class="font-bold text-white text-[17px] uppercase">
-            Mito Airline
-          </h1>
+        <div class="flex h-[50px] items-center gap-5 bg-primary px-4">
+          <SvgIcon name="logo" class="h-8 w-8 text-white" />
+          <h1 class="text-[17px] font-bold uppercase text-white">Mito Airline</h1>
         </div>
       </template>
       <template #content>
         <div class="p-6">
-          <form
-            class='flex h-full flex-wrap gap-[20px]'
-            @submit="onSubmit"
-          >
-            <div class="flex flex-col sm:flex-row gap-4 w-full">
-              <Field
-                v-slot="{ value, errors, handleChange }"
-                name="origin"
-              >
+          <form class="flex h-full flex-wrap gap-[20px]" @submit="onSubmit">
+            <div class="flex w-full flex-col gap-4 sm:flex-row">
+              <Field v-slot="{ value, errors, handleChange }" name="origin">
                 <Select
                   :model-value="value"
-                  @update:model-value="handleChange"
                   :error="errors?.[0]"
                   label="Origin"
                   :options="origins"
+                  @update:model-value="handleChange"
                 />
               </Field>
-              <Field
-                v-slot="{ value, errors, handleChange }"
-                name="destination"
-              >
+              <Field v-slot="{ value, errors, handleChange }" name="destination">
                 <Select
                   :model-value="value"
-                  @update:model-value="handleChange"
                   :error="errors?.[0]"
                   label="Destination"
                   :options="destinations"
+                  @update:model-value="handleChange"
                 />
               </Field>
             </div>
-            <div class="flex flex-col sm:flex-row gap-4 w-full">
-              <Field
-                v-slot="{ value, errors, handleChange }"
-                name="departure"
-              >
+            <div class="flex w-full flex-col gap-4 sm:flex-row">
+              <Field v-slot="{ value, errors, handleChange }" name="departure">
                 <Datepicker
                   :model-value="value"
-                  @update:model-value="handleChange"
                   :error="errors?.[0]"
                   placeholder="Departure"
-                  :allowedDates="departureDates"
+                  :allowed-dates="departureDates"
+                  @update:model-value="handleChange"
                 />
               </Field>
-              <Field
-                v-slot="{ value, errors, handleChange }"
-                name="return"
-              >
+              <Field v-slot="{ value, errors, handleChange }" name="return">
                 <Datepicker
                   :model-value="value"
-                  @update:model-value="handleChange"
                   :error="errors?.[0]"
                   placeholder="Return"
-                  :allowedDates="returnDates"
+                  :allowed-dates="returnDates"
+                  @update:model-value="handleChange"
                 />
               </Field>
             </div>
@@ -165,7 +161,7 @@ watch(() => values, (currentValues) => {
               <Button
                 type="submit"
                 variant="primary"
-                class="w-full mx-auto sm:w-auto sm:px-16"
+                class="mx-auto w-full sm:w-auto sm:px-16"
               >
                 Search
               </Button>

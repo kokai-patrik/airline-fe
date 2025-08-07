@@ -38,14 +38,14 @@ const {
       departure: departure.value,
       arrival: arrival.value,
       date: from.value,
-    })
+    });
   },
   {
     immediate: true,
     lazy: true,
     watch: [from],
-  }
-)
+  },
+);
 
 const {
   data: inboundData,
@@ -58,27 +58,21 @@ const {
       departure: arrival.value,
       arrival: departure.value,
       date: to.value,
-    })
+    });
   },
   {
     immediate: true,
     lazy: true,
     watch: [to],
-  }
-)
+  },
+);
 </script>
 
 <template>
   <div>
-    <div class="flex items-center gap-10 w-full h-[60px] px-5 bg-primary">
-      <NuxtLink
-        to="/"
-        title="Mito Airline"
-      >
-        <SvgIcon
-          name="logo"
-          class="w-8 h-8 text-white"
-        />
+    <div class="flex h-[60px] w-full items-center gap-10 bg-primary px-5">
+      <NuxtLink to="/" title="Mito Airline">
+        <SvgIcon name="logo" class="h-8 w-8 text-white" />
       </NuxtLink>
       <div class="flex items-center gap-6 text-white">
         <div>
@@ -87,20 +81,18 @@ const {
         </div>
         <div>
           <SvgIcon name="long-arrow-right" class="text-white" />
-          <SvgIcon name="long-arrow-right" class="text-white rotate-180" />
+          <SvgIcon name="long-arrow-right" class="rotate-180 text-white" />
         </div>
         <div class="mt-auto">{{ getStationName(arrival) }}</div>
       </div>
     </div>
-    <div class="container mx-auto pb-10 px-3">
-      <div class="flex items-center justify-center w-full gap-5 py-6 lg:py-10">
-        <PlaneIcon class="w-6 h-6 lg:w-8 lg:h-8" />
-        <h1 class="text-primary text-2xl lg:text-4xl font-light uppercase">
-          Select Flight
-        </h1>
+    <div class="container mx-auto px-3 pb-10">
+      <div class="flex w-full items-center justify-center gap-5 py-6 lg:py-10">
+        <PlaneIcon class="h-6 w-6 lg:h-8 lg:w-8" />
+        <h1 class="text-2xl font-light uppercase text-primary lg:text-4xl">Select Flight</h1>
       </div>
-      <div class="grid lg:grid-cols-4 gap-4">
-        <div class="lg:col-span-3 lg:order-2">
+      <div class="grid gap-4 lg:grid-cols-4">
+        <div class="lg:order-2 lg:col-span-3">
           <FlightBox
             :departure="getStationName(departure)"
             :arrival="getStationName(arrival)"
@@ -118,11 +110,9 @@ const {
                 <p>No outbound flights found.</p>
               </template>
               <template v-if="outboundData?.length">
-                <FlightDates
-                  :currentDate="from"
-                />
+                <FlightDates :current-date="from" />
                 <FaresGrid
-                  :faresData="outboundData"
+                  :fares-data="outboundData"
                   type="outbound"
                   @add-to-cart="handlingAddToCart"
                 />
@@ -137,10 +127,9 @@ const {
           >
             <template v-if="inboundData?.length === 0">
               <InboundForm
-                :departure="arrival"
-                :arrival="departure"
-                :from="from"
-              />
+:departure="arrival"
+:arrival="departure"
+:from="from" />
             </template>
             <template v-if="inboundData?.length">
               <template v-if="inboundPending">
@@ -154,11 +143,9 @@ const {
                   <p>No inbound flights found.</p>
                 </template>
                 <template v-if="inboundData?.length">
-                  <FlightDates
-                    :currentDate="to"
-                  />
+                  <FlightDates :current-date="to" />
                   <FaresGrid
-                    :faresData="inboundData"
+                    :fares-data="inboundData"
                     type="inbound"
                     @add-to-cart="handlingAddToCart"
                   />
@@ -167,7 +154,7 @@ const {
             </template>
           </FlightBox>
         </div>
-        <div class="lg:col-span-1 lg:order-1">
+        <div class="lg:order-1 lg:col-span-1">
           <Summary />
         </div>
       </div>

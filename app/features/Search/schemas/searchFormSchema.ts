@@ -20,16 +20,9 @@ export const schema = object({
     }),
   ),
 
-  return: preprocess(
-    (val) => (val ? new Date(val as string) : undefined),
-    date().optional(),
-  ),
-}).refine(
-  (data) =>
-    !data.return ||
-    (data.departure && data.return > data.departure),
-  {
-    message: 'Return date must be after departure',
-    path: ['return'],
-  }
-);
+  return: preprocess((val) => (val ? new Date(val as string) : undefined), date()
+  .optional()),
+}).refine((data) => !data.return || (data.departure && data.return > data.departure), {
+  message: 'Return date must be after departure',
+  path: ['return'],
+});

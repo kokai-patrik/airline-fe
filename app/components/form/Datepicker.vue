@@ -19,13 +19,18 @@ const formatDate = (date: Date) => {
     month: '2-digit',
     day: '2-digit',
   }).format(date);
-}
+};
 </script>
 
 <template>
-  <div :class="['datepicker', {
-    'has-error': props.error
-  }]">
+  <div
+    :class="[
+      'datepicker',
+      {
+        'has-error': props.error,
+      },
+    ]"
+  >
     <VueDatePicker
       v-model="value"
       auto-apply
@@ -37,23 +42,19 @@ const formatDate = (date: Date) => {
         showNow: false,
         showPreview: false,
         showSelect: false,
-        showCancel: false
+        showCancel: false,
       }"
       :placeholder="props.placeholder"
       auto-position="top"
     >
       <template #input-icon>
-        <SvgIcon
-          name="date"
-          class="w-5 h-5 text-gray"
-        />
+        <SvgIcon name="date" class="h-5 w-5 text-gray" />
       </template>
     </VueDatePicker>
     <Error
-      v-if="props.error"
-      :message="props.error"
-      class="mt-2"
-    />
+v-if="props.error"
+:message="props.error"
+class="mt-2" />
   </div>
 </template>
 
@@ -75,7 +76,7 @@ const formatDate = (date: Date) => {
   }
 
   .dp__calendar_header {
-    @apply bg-light-gray border-0 rounded-sm;
+    @apply rounded-sm border-0 bg-light-gray;
   }
 
   .dp__calendar_header_item {
@@ -89,7 +90,7 @@ const formatDate = (date: Date) => {
 
   /* Today */
   .dp__today {
-    @apply text-primary border-2 border-primary bg-white;
+    @apply border-2 border-primary bg-white text-primary;
 
     &.dp__cell_disabled {
       @apply border-primary/50 bg-white text-gray;
@@ -98,7 +99,7 @@ const formatDate = (date: Date) => {
 
   /* Input */
   .dp__input {
-    @apply transition-all h-[50px] border-gray rounded-sm pl-3 font-normal;
+    @apply h-[50px] rounded-sm border-gray pl-3 font-normal transition-all;
   }
 
   .dp__input_focus {
@@ -121,7 +122,7 @@ const formatDate = (date: Date) => {
 
   &.has-error {
     :deep(.dp__input) {
-      @apply bg-light-magenta border-secondary ring-1 ring-secondary shadow-error;
+      @apply border-secondary bg-light-magenta shadow-error ring-1 ring-secondary;
     }
   }
 }

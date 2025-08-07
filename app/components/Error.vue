@@ -7,14 +7,10 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    class="flex gap-1 text-secondary"
-    role="alert"
-  >
-    <SvgIcon name="error" class="w-5 h-5" />
-    <p class="text-xs pt-1">{{ props.message }}</p>
+  <div class="flex gap-1 text-secondary" role="alert">
+    <SvgIcon name="error" class="h-5 w-5" />
+    <p class="pt-1 text-xs">{{ props.message }}</p>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

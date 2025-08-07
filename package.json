@@ -7,7 +7,9 @@
     "dev": "nuxt dev -p 3001 --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.11.2",
@@ -17,13 +19,18 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@nuxt/eslint-config": "^1.8.0",
     "@vee-validate/nuxt": "^4.15.0",
     "@vee-validate/zod": "^4.15.0",
     "@vuepic/vue-datepicker": "^11.0.2",
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.1",
+    "eslint": "^9.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
     "pinia-plugin-persistedstate": "^4.4.1",
     "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^3.4.10",
     "vite-svg-loader": "^5.1.0",
     "zod": "^3.25.46"

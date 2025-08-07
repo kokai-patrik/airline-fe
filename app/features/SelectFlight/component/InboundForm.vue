@@ -30,7 +30,7 @@ const { setFieldValue, handleSubmit } = useForm({
 
 const returnDates = ref<string[]>([]);
 
-const onSubmit = handleSubmit(async values => {
+const onSubmit = handleSubmit(async (values) => {
   if (values.return) {
     returnDate.value = values.return;
 
@@ -47,45 +47,43 @@ const now = new Date();
 const nowLaterMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
 onMounted(async () => {
-  const getReturnDates = await fetchDates(props.arrival, props.departure, getISODate(now), getISODate(nowLaterMonth));
+  const getReturnDates = await fetchDates(
+    props.arrival,
+    props.departure,
+    getISODate(now),
+    getISODate(nowLaterMonth),
+  );
 
   if (getReturnDates) {
     returnDates.value = getReturnDates;
   }
 });
 
-watch(() => props.from, async (newFrom) => {
-  if (newFrom) {
-    setFieldValue('departure', new Date(newFrom));
-  }
-}, {
-  immediate: true,
-  deep: true,
-});
+watch(
+  () => props.from,
+  async (newFrom) => {
+    if (newFrom) {
+      setFieldValue('departure', new Date(newFrom));
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
 </script>
 
 <template>
-  <form
-    class='flex flex-col md:flex-row h-full gap-[20px] p-5'
-    @submit="onSubmit"
-  >
-    <Field
-      v-slot="{ value, errors, handleChange }"
-      name="return"
-    >
+  <form class="flex h-full flex-col gap-[20px] p-5 md:flex-row" @submit="onSubmit">
+    <Field v-slot="{ value, errors, handleChange }" name="return">
       <Datepicker
         :model-value="value"
-        @update:model-value="handleChange"
         :error="errors?.[0]"
         placeholder="Return"
-        :allowedDates="returnDates"
+        :allowed-dates="returnDates"
+        @update:model-value="handleChange"
       />
     </Field>
-    <Button
-      type="submit"
-      variant="primary"
-    >
-      Search
-    </Button>
+    <Button type="submit" variant="primary"> Search </Button>
   </form>
 </template>

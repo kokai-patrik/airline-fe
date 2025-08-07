@@ -14,12 +14,7 @@ export const schema = object({
       required_error: 'Please select return',
     }),
   ),
-}).refine(
-  (data) =>
-    !data.return ||
-    (data.departure && data.return > data.departure),
-  {
-    message: 'Return date must be after departure',
-    path: ['return'],
-  }
-);
+}).refine((data) => !data.return || (data.departure && data.return > data.departure), {
+  message: 'Return date must be after departure',
+  path: ['return'],
+});

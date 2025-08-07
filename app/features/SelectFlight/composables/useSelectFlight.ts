@@ -27,7 +27,9 @@ export function useSelectFlight() {
       throw new Error('No data returned from API');
     } catch (error) {
       throw new Error(
-        error instanceof Error ? error.message : 'An unknown error occurred while fetching flight dates'
+        error instanceof Error
+          ? error.message
+          : 'An unknown error occurred while fetching flight dates',
       );
     }
   }
@@ -35,4 +37,4 @@ export function useSelectFlight() {
   return {
     getFareCharts,
   };
-};
+}
