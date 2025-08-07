@@ -1,0 +1,21 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Log in to GitHub Container Registry
+      run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+
+    - name: Build and tag Docker image
+      run: |
+        docker build -t ghcr.io/${{ github.repository_owner }}/airline-fe:latest .
+
+    - name: Push Docker image to GitHub Packages
+      run: docker push ghcr.io/${{ github.repository_owner }}/airline-fe:latest
