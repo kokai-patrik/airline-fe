@@ -27,6 +27,11 @@ export interface Flight {
   fares: Fare[];
 }
 
+export interface FlightsWithDates {
+  flights: Flight[];
+  prevDate: string | null;
+  nextDate: string | null;
+}
 export interface ApiResponse<T> {
   data: T;
 }

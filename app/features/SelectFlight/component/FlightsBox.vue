@@ -12,7 +12,7 @@ defineProps<{
       <p class="font-medium uppercase text-gray">
         {{ title }}
       </p>
-      <div class="flex items-center gap-3 text-lg font-bold text-primary lg:gap-5">
+      <div class="flex items-center gap-3 sm:text-lg font-bold text-primary lg:gap-5">
         <p>{{ departure }}</p>
         <SvgIcon name="long-arrow-right" class="text-primary" />
         <p>{{ arrival }}</p>

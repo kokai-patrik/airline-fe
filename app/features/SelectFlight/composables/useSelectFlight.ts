@@ -1,6 +1,6 @@
 import { useApi } from '~/composables/useApi';
 
-import type { ApiResponse, Flight } from '~/types';
+import type { ApiResponse, FlightsWithDates } from '~/types';
 
 export function useSelectFlight() {
   async function getFareCharts({
@@ -13,7 +13,7 @@ export function useSelectFlight() {
     date: string;
   }) {
     try {
-      const response: ApiResponse<Flight[]> = await useApi('fare-charts', {
+      const response: ApiResponse<FlightsWithDates> = await useApi('fare-charts', {
         method: 'GET',
         params: {
           departure,

@@ -5,6 +5,7 @@ import CartItem from '~/features/Cart/components/CartItem.vue';
 import { useCartStore } from '~/features/Cart/stores/cart';
 
 import { formatPrice } from '~/utils/priceFormat';
+import { sortByType } from '~/features/Cart/helpers/cart';
 
 const cartStore = useCartStore();
 const { cart, total, isModalOpen } = storeToRefs(cartStore);
@@ -28,9 +29,10 @@ function reset() {
       <div class="p-6">
         <div v-if="cart.length" class="flex flex-col lg:flex-row gap-2">
           <CartItem
-            v-for="item in cart"
+            v-for="item in sortByType(cart)"
             :key="item.id"
             :cart-item="item"
+            class="hide-separator"
           />
         </div>
         <p v-if="cart.length === 0" class="text-gray font-bold">

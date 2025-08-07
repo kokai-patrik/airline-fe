@@ -6,6 +6,7 @@ import CartItem from '~/features/Cart/components/CartItem.vue';
 import Button from '~/components/form/Button.vue';
 
 import { formatPrice } from '~/utils/priceFormat';
+import { sortByType } from '~/features/Cart/helpers/cart';
 
 const { cart, total, isModalOpen } = storeToRefs(useCartStore());
 </script>
@@ -19,7 +20,7 @@ const { cart, total, isModalOpen } = storeToRefs(useCartStore());
       </div>
       <div v-if="cart.length" class="flex flex-col gap-2">
         <CartItem
-          v-for="item in cart"
+          v-for="item in sortByType(cart)"
           :key="item.id"
           :cart-item="item"
         />

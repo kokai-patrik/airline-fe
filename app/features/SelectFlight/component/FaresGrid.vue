@@ -35,14 +35,12 @@ const getButtonText = (fare: Fare) => {
 };
 
 function addToCart(fare: Fare, option: Flight) {
-  const name = `${stationsStore.getStationName(option.departureStation)} – ${stationsStore.getStationName(option.arrivalStation)}`;
   const date = getISODate(new Date(option.departureDateTime));
-  const id = getCartItemId(fare, option, props.type);
 
   emit('addToCart', {
     type: props.type,
-    id,
-    name,
+    id: getCartItemId(fare, option, props.type),
+    name: `${stationsStore.getStationName(option.departureStation)} – ${stationsStore.getStationName(option.arrivalStation)}`,
     price: fare.price.amount,
     date,
     travelTime: {
@@ -71,7 +69,7 @@ function getBundleTextClass(index: number) {
     :key="`${option.departureDateTime}-${option.arrivalDateTime}`"
     class="flex flex-col gap-2 border-b border-light-gray-3 lg:gap-0"
   >
-    <div class="grid grid-cols-3 grid-rows-[auto_auto] lg:grid-cols-4 lg:grid-rows-1">
+    <div class="grid grid-cols-3 grid-rows-[auto_auto] lg:grid-cols-[120px_1fr_1fr_1fr] lg:grid-rows-1">
       <div
         class="col-span-3 flex w-full items-center justify-center gap-2 py-1 text-sm font-light text-medium-gray lg:col-span-1 lg:row-start-1 lg:justify-start lg:px-4"
       >

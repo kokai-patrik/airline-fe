@@ -24,7 +24,7 @@ const router = useRouter();
 const { fetchDates } = useSearchForm();
 const { returnDate } = storeToRefs(useSearchStore());
 
-const { values, setFieldValue, handleSubmit } = useForm({
+const { setFieldValue, handleSubmit } = useForm({
   validationSchema: toTypedSchema(schema),
 });
 
@@ -81,6 +81,12 @@ watch(
         @update:model-value="handleChange"
       />
     </Field>
-    <Button type="submit" variant="primary"> Search </Button>
+    <Button
+      type="submit"
+      variant="primary"
+      class="sm:h-[50px]"
+    >
+      Search
+    </Button>
   </form>
 </template>

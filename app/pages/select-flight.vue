@@ -109,15 +109,19 @@ const {
             </template>
             <template v-else>
               <template v-if="outboundError">
-                <p class="text-red-500">Error loading outbound flights.</p>
+                <p class="p-4 text-red-500">Error loading outbound flights.</p>
               </template>
-              <template v-if="outboundData?.length === 0">
-                <p>No outbound flights found.</p>
+              <template v-if="outboundData?.flights?.length === 0">
+                <p class="p-4">No outbound flights found.</p>
               </template>
-              <template v-if="outboundData?.length">
-                <FlightDates :current-date="from" />
+              <template v-if="outboundData?.flights?.length">
+                <FlightDates
+                  :current-date="from"
+                  :prev-date="outboundData.prevDate"
+                  :next-date="outboundData.nextDate"
+                />
                 <FaresGrid
-                  :fares-data="outboundData"
+                  :fares-data="outboundData.flights"
                   type="outbound"
                   @add-to-cart="handlingAddToCart"
                 />
@@ -130,28 +134,32 @@ const {
             :arrival="getStationName(departure)"
             title="Inbound"
           >
-            <template v-if="inboundData?.length === 0">
+            <template v-if="!inboundData?.flights?.length">
               <InboundForm
                 :departure="arrival"
                 :arrival="departure"
                 :from="from"
               />
             </template>
-            <template v-if="inboundData?.length">
+            <template v-if="inboundData?.flights?.length">
               <template v-if="inboundPending">
                 <p>Loading...</p>
               </template>
               <template v-else>
                 <template v-if="inboundError">
-                  <p>Error loading inbound flights.</p>
+                  <p class="p-4 text-red-500">Error loading inbound flights.</p>
                 </template>
-                <template v-if="inboundData?.length === 0">
-                  <p>No inbound flights found.</p>
+                <template v-if="inboundData?.flights?.length === 0">
+                  <p class="p-4">No inbound flights found.</p>
                 </template>
-                <template v-if="inboundData?.length">
-                  <FlightDates :current-date="to" />
+                <template v-if="inboundData?.flights?.length">
+                  <FlightDates
+                    :current-date="to"
+                    :prev-date="inboundData.prevDate"
+                    :next-date="inboundData.nextDate"
+                  />
                   <FaresGrid
-                    :fares-data="inboundData"
+                    :fares-data="inboundData.flights"
                     type="inbound"
                     @add-to-cart="handlingAddToCart"
                   />

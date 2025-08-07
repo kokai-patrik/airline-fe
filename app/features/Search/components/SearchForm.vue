@@ -4,6 +4,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 
 import { useSearchForm } from '~/features/Search/composables/useSearchForm';
 import { useSearchStore } from '~/features/Search/stores/search';
+import { useCartStore } from '~/features/Cart/stores/cart';
 
 import { getISODate, now, nowLaterMonth } from '~/helpers/datetime';
 import { schema } from '~/features/Search/schemas/searchFormSchema';
@@ -16,6 +17,7 @@ import Button from '~/components/form/Button.vue';
 
 const router = useRouter();
 const searchStore = useSearchStore();
+const cartStore = useCartStore();
 const { fetchDates, isStoreInitialized, origins, destinations } = useSearchForm();
 
 const { values, setFieldValue, handleSubmit } = useForm({
@@ -26,6 +28,8 @@ const departureDates = ref<string[]>([]);
 const returnDates = ref<string[]>([]);
 
 const onSubmit = handleSubmit(async (values) => {
+  cartStore.clearCart();
+
   await router.push({
     name: 'select-flight',
     query: {
